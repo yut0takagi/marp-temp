@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="60" viewBox="0 0 240 60">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1">
+      <stop offset="0" stop-color="#323850"/>
+      <stop offset="1" stop-color="#C4CBD3"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="20" width="44" height="20" rx="4" fill="url(#g)"/>
+  <text x="60" y="36" font-family="-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif" font-size="18" fill="#323850">Your Company</text>
+</svg>

@@ -1,0 +1,409 @@
+/*
+@theme business
+@auto-scaling true
+*/
+
+/* Brand palette (requested 3 colors) */
+:root {
+  --bg: #F7F4EC;            /* Warm light background */
+  --fg: #323850;            /* Primary text (deep navy) */
+  --accent: #C4CBD3;        /* Muted blue-gray for accents */
+
+  --inverse-bg: #323850;    /* Dark background */
+  --inverse-fg: #F7F4EC;    /* Light text on dark */
+
+  --border: #C4CBD3;
+  --code-bg: rgba(50, 56, 80, 0.06);
+  --shadow: 0 10px 24px rgba(50, 56, 80, 0.16);
+
+  /* Layout rhythm */
+  --px: 96px;               /* horizontal padding */
+  --py: 72px;               /* vertical padding */
+  --titlebar-h: 84px;       /* fixed title band height */
+}
+
+/* Reset-like base tuned for slides */
+section {
+  /* Left bar as background layer (keeps pagination ::after free) */
+  background:
+    linear-gradient(90deg, rgba(196,203,211,0.45) 0 10px, transparent 0),
+    var(--bg);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--accent) 45%, transparent) 0 10px, transparent 0),
+    var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Hiragino Sans",
+    Meiryo, Roboto, Ubuntu, "Helvetica Neue", Arial, sans-serif;
+  font-size: 28px;
+  line-height: 1.45;
+  letter-spacing: 0.2px;
+  padding: calc(var(--py) + var(--titlebar-h)) var(--px) var(--py);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Distinctive brand bars (top + left) */
+section::before,
+section::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+/* Top title band */
+section::before {
+  left: 0; right: 0; top: 0; height: var(--titlebar-h);
+  /* Fallback without color-mix */
+  background:
+    linear-gradient(90deg, rgba(196,203,211,0.35) 0%, rgba(196,203,211,0.15) 55%, transparent 100%),
+    linear-gradient(90deg, var(--fg), var(--accent));
+  /* Preferred with color-mix (if supported) */
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--accent) 55%, white) 0%,
+      color-mix(in srgb, var(--accent) 15%, transparent) 55%,
+      transparent 100%),
+    linear-gradient(90deg, var(--fg), var(--accent));
+  background-repeat: no-repeat;
+  background-size: 100% 100%, 100% 6px; /* band + thin line */
+  background-position: 0 0, 0 calc(var(--titlebar-h) - 6px);
+}
+/* (removed ::after left bar to avoid conflict with pagination) */
+
+/* Pagination (shown when `paginate: true`) */
+section[data-marpit-pagination]::after {
+  content: attr(data-marpit-pagination) " / " attr(data-marpit-pagination-total);
+  position: absolute;
+  right: 24px;
+  bottom: 12px;
+  font-size: 0.6em;
+  letter-spacing: 0.02em;
+  opacity: 0.75;
+  z-index: 3;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(50,56,80,0.08);
+  color: var(--fg);
+}
+/* Fixed footer rule */
+section::marker { /* keeps UA from interfering */ }
+section .footer-rule {
+  position: absolute;
+  left: var(--px);
+  right: var(--px);
+  bottom: 48px;
+  height: 1px;
+  background: rgba(50,56,80,0.16);
+  background: color-mix(in srgb, var(--fg) 16%, transparent);
+}
+
+/* Headings */
+section h1, section h2, section h3 {
+  color: var(--fg);
+  font-weight: 730;
+  line-height: 1.18;
+  margin: 0 0 0.35em;
+}
+section h1 {
+  font-size: 2.0em; letter-spacing: 0.4px;
+  position: absolute;
+  top: calc(var(--py) - 6px);
+  left: var(--px);
+  right: var(--px);
+  margin: 0;
+  z-index: 1;
+}
+section h2 { font-size: 1.42em; }
+section h3 { font-size: 1.08em; text-transform: none; opacity: 0.9; }
+/* Heading underline variants */
+section h1.title-ruled,
+section h1.ruled,
+section.ruled h1:first-of-type {
+  padding-bottom: 0.3em;
+  border-bottom: 3px solid var(--accent);
+  border-bottom: 3px solid color-mix(in srgb, var(--accent) 65%, white);
+}
+
+/* Text & links */
+section a { color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); text-underline-offset: 3px; }
+section p { margin: 0.35em 0 0.9em; }
+
+/* Lists */
+section ul, section ol { margin: 0.4em 0 0.9em; padding-left: 1.2em; }
+section li { margin: 0.25em 0; }
+section ul li::marker { content: "•  "; color: var(--fg); font-weight: 700; }
+section ul li::marker { color: color-mix(in srgb, var(--fg) 70%, var(--accent)); }
+section ol li::marker { color: var(--fg); font-weight: 700; }
+section ol li::marker { color: color-mix(in srgb, var(--fg) 70%, var(--accent)); }
+
+/* Tables */
+section table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 0.85em; }
+section th, section td { border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 10px 12px; vertical-align: top; }
+section th:first-child, section td:first-child { border-left: 1px solid var(--border); }
+section tr:first-child th { border-top: 1px solid var(--border); }
+section th { background: rgba(196,203,211,0.35); text-align: left; font-weight: 700; }
+section th { background: color-mix(in srgb, var(--accent) 35%, white); }
+section tbody tr:nth-child(odd) td { background: rgba(196,203,211,0.10); }
+section tbody tr:nth-child(odd) td { background: color-mix(in srgb, var(--accent) 10%, white); }
+section caption { caption-side: bottom; font-size: 0.72em; opacity: 0.7; padding-top: 6px; }
+
+/* Code */
+section code, section pre { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace; }
+section code { background: var(--code-bg); padding: 0.12em 0.35em; border-radius: 6px; }
+section pre { background: var(--code-bg); padding: 14px 16px; border-radius: 12px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+section pre code { background: transparent; padding: 0; }
+
+/* Blockquote */
+section blockquote {
+  margin: 0.6em 0;
+  padding: 0.6em 0.9em;
+  border-left: 8px solid rgba(196,203,211,0.9);
+  border-left: 8px solid color-mix(in srgb, var(--accent) 90%, var(--fg));
+  background: rgba(196,203,211,0.22);
+  background: color-mix(in srgb, var(--accent) 22%, white);
+}
+section blockquote strong { color: var(--fg); }
+
+/* Header / Footer (Marp directives `header:` / `footer:`) */
+header, footer {
+  position: absolute;
+  left: var(--px);
+  right: var(--px);
+  font-size: 0.65em;
+  opacity: 0.82;
+}
+header { top: 18px; display: flex; align-items: center; gap: 10px; }
+footer { bottom: 12px; }
+header .brand-mark {
+  width: 14px; height: 14px; border-radius: 3px;
+  background: linear-gradient(135deg, var(--fg), var(--accent));
+  box-shadow: 0 1px 0 rgba(0,0,0,0.08) inset;
+}
+
+/* Accent utilities */
+.callout {
+  background: rgba(196,203,211,0.52);
+  background: color-mix(in srgb, var(--accent) 52%, white);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px 18px;
+  box-shadow: var(--shadow);
+}
+.badge {
+  display: inline-block;
+  font-size: 0.7em;
+  padding: 0.25em 0.6em;
+  border-radius: 999px;
+  background: var(--accent);
+  color: var(--fg);
+}
+
+/* Title / lead slide */
+section.lead {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr auto auto 1fr;
+  row-gap: 0.2em;
+  justify-content: start;
+}
+/* Diagonal accent on cover */
+section.lead::after {
+  content: "";
+  position: absolute;
+  right: -10%; top: -25%;
+  width: 65%; height: 180%;
+  transform: rotate(8deg);
+  background: linear-gradient(120deg, rgba(196,203,211,0.55) 0%, rgba(196,203,211,0.18) 60%, transparent 100%);
+  background: linear-gradient(120deg,
+    color-mix(in srgb, var(--accent) 55%, white) 0%,
+    color-mix(in srgb, var(--accent) 18%, transparent) 60%,
+    transparent 100%);
+  filter: drop-shadow(0 20px 30px rgba(50,56,80,0.18));
+  z-index: 0;
+}
+section.lead { padding: var(--py) var(--px); }
+section.lead::before { display: none; }
+section.lead h1 { position: static; font-size: 2.6em; margin: auto 0 0.1em 0; }
+section.lead p.subtitle { font-size: 1.12em; opacity: 0.9; }
+
+/* Cover variant: HERO (more dramatic) */
+section.lead.cover-hero {
+  position: relative;
+  /* subtle dot pattern */
+  background-image:
+    radial-gradient(circle at center, rgba(50,56,80,0.10) 1px, transparent 1.2px),
+    var(--bg);
+  background-size: 18px 18px, auto;
+  background-position: calc(var(--px)) calc(var(--py) + 12px), 0 0;
+  padding: calc(var(--py) * 1.1) var(--px);
+}
+section.lead.cover-hero::before {
+  /* angled color slab */
+  content: "";
+  position: absolute;
+  right: -16%; top: -28%;
+  width: 70%; height: 210%;
+  transform: rotate(10deg);
+  background: linear-gradient(135deg, rgba(50,56,80,0.12), rgba(196,203,211,0.65));
+  box-shadow: 0 24px 48px rgba(50,56,80,0.18);
+}
+section.lead.cover-hero::after {
+  /* inner highlight arc */
+  content: "";
+  position: absolute;
+  left: -15%; top: -20%;
+  width: 80%; height: 180%;
+  transform: rotate(-12deg);
+  background:
+    radial-gradient(65% 55% at 50% 50%, rgba(196,203,211,0.30), transparent 60%);
+  filter: blur(2px);
+}
+section.lead.cover-hero .kicker {
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.68em;
+  color: var(--fg);
+  background: rgba(196,203,211,0.22);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+section.lead.cover-hero h1 {
+  position: relative;
+  z-index: 1;
+  font-size: 2.9em;
+  line-height: 1.06;
+  margin-top: 0.2em;
+  max-width: 70%;
+}
+section.lead.cover-hero .subtitle {
+  position: relative;
+  z-index: 1;
+  font-size: 1.08em;
+  opacity: 0.9;
+  max-width: 60%;
+}
+section.lead.cover-hero .watermark {
+  position: absolute;
+  left: var(--px);
+  bottom: 12%;
+  font-size: 5.6em;
+  line-height: 0.9;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #323850;
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+section.lead.cover-hero .meta {
+  position: absolute;
+  right: var(--px);
+  bottom: 20px;
+  display: flex;
+  gap: 8px;
+  z-index: 2;
+}
+
+/* Divider */
+.hr {
+  height: 2px;
+  background: var(--accent);
+  margin: 16px 0 12px;
+}
+
+/* Inverse (dark) slide */
+section.inverse {
+  background:
+    linear-gradient(90deg, rgba(247,244,236,0.25) 0 10px, transparent 0),
+    var(--inverse-bg);
+  background:
+    linear-gradient(90deg, color-mix(in srgb, var(--inverse-fg) 25%, transparent) 0 10px, transparent 0),
+    var(--inverse-bg);
+  color: var(--inverse-fg);
+}
+section.inverse[data-marpit-pagination]::after {
+  background: rgba(247,244,236,0.18);
+  color: var(--inverse-fg);
+}
+section.inverse h1, section.inverse h2, section.inverse h3,
+section.inverse a { color: var(--inverse-fg); }
+section.inverse::before {
+  background:
+    linear-gradient(90deg, rgba(247,244,236,0.15) 0%, transparent 100%),
+    linear-gradient(90deg, rgba(247,244,236,0.85), rgba(196,203,211,0.65));
+  background-size: 100% 100%, 100% 6px;
+  background-position: 0 0, 0 calc(var(--titlebar-h) - 6px);
+}
+section.inverse::before {
+  background:
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--inverse-fg) 15%, transparent) 0%,
+      transparent 100%),
+    linear-gradient(90deg,
+      color-mix(in srgb, var(--inverse-fg) 85%, transparent),
+      color-mix(in srgb, var(--accent) 65%, transparent));
+  background-size: 100% 100%, 100% 6px;
+  background-position: 0 0, 0 calc(var(--titlebar-h) - 6px);
+}
+section.inverse .callout {
+  background: color-mix(in srgb, var(--inverse-fg) 10%, transparent);
+  border-color: color-mix(in srgb, var(--inverse-fg) 35%, transparent);
+}
+section.inverse .badge { background: color-mix(in srgb, var(--inverse-fg) 18%, transparent); color: var(--inverse-fg); }
+
+/* Layout utilities */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
+.three-col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.aside-right { display: grid; grid-template-columns: 2fr 1fr; gap: 28px; }
+.stack { display: grid; gap: 12px; }
+
+/* Card & KPI */
+.card { border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; background: white; box-shadow: var(--shadow); }
+.kpi { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: baseline; }
+.kpi .value { font-size: 1.8em; font-weight: 750; letter-spacing: 0.2px; }
+.kpi .label { font-size: 0.7em; opacity: 0.75; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Media helpers */
+img.frame { border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow); }
+img.edge { width: calc(100% + var(--px)); max-width: none; margin-left: calc(var(--px) * -0.5); border-radius: 0; }
+
+/* Accent objects (theme-colored) */
+.pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; background: var(--accent); color: var(--fg); font-size: 0.78em; font-weight: 650; }
+.pill.ghost { background: rgba(196,203,211,0.15); background: color-mix(in srgb, var(--accent) 15%, transparent); border: 1px solid var(--border); }
+.pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--fg); opacity: 0.7; }
+
+.chip { display: inline-block; padding: 4px 8px; border-radius: 8px; border: 1px solid var(--border); background: white; font-size: 0.72em; }
+
+.band { height: 12px; border-radius: 8px; background: linear-gradient(90deg, var(--fg), var(--accent)); margin: 12px 0 16px; }
+
+.ribbon { position: absolute; top: calc(var(--py) + 8px); right: var(--px); background: linear-gradient(135deg, var(--fg), var(--accent)); color: var(--inverse-fg); padding: 6px 10px; border-radius: 8px; font-size: 0.7em; box-shadow: var(--shadow); z-index: 4; }
+
+.dots { display: inline-grid; grid-template-columns: repeat(3, 10px); gap: 8px; align-items: center; }
+.dots span { width: 10px; height: 10px; border-radius: 50%; background: var(--fg); background: color-mix(in srgb, var(--fg) 75%, var(--accent)); }
+
+.stamp { display: inline-flex; align-items: center; justify-content: center; width: 64px; height: 64px; border-radius: 50%; color: var(--fg); border: 2px solid rgba(116,122,145,0.6); border: 2px solid color-mix(in srgb, var(--fg) 40%, var(--accent)); box-shadow: var(--shadow); background: rgba(196,203,211,0.22); background: color-mix(in srgb, var(--accent) 22%, white); font-weight: 750; }
+/* Cover variant: SPLIT (image on right) */
+section.lead.cover-split { position: relative; padding: calc(var(--py) * 1.05) var(--px); }
+section.lead.cover-split::before { display: none; }
+section.lead.cover-split .title-wrap { position: relative; z-index: 2; max-width: 52%; }
+section.lead.cover-split .kicker { display: inline-block; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.68em; background: rgba(196,203,211,0.22); border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; position: relative; z-index: 2; }
+section.lead.cover-split h1 { position: relative; z-index: 2; font-size: 2.6em; line-height: 1.08; margin: 0.25em 0 0.1em; }
+section.lead.cover-split .subtitle { position: relative; z-index: 2; font-size: 1.05em; opacity: 0.9; }
+section.lead.cover-split img.cover { position: absolute; top: 0; right: 0; bottom: 0; width: 56%; height: 100%; object-fit: cover; clip-path: polygon(12% 0, 100% 0, 100% 100%, 0 100%); box-shadow: -12px 0 24px rgba(50,56,80,0.18) inset; z-index: 0; }
+
+/* Cover variant: VERTICAL band */
+section.lead.cover-vertical { position: relative; padding: calc(var(--py) * 1.05) var(--px); }
+section.lead.cover-vertical::before { content: ""; position: absolute; left: -6%; top: -12%; width: 36%; height: 130%; transform: skewX(-10deg); background: linear-gradient(180deg, var(--fg), var(--accent)); box-shadow: 0 24px 48px rgba(50,56,80,0.2); z-index: 0; }
+section.lead.cover-vertical h1 { position: relative; z-index: 2; font-size: 2.8em; line-height: 1.06; max-width: 62%; margin-left: 2%; }
+section.lead.cover-vertical .subtitle { position: relative; z-index: 2; max-width: 58%; margin-left: 2%; }
+section.lead.cover-vertical .kicker { position: relative; z-index: 2; margin-left: 2%; display: inline-block; text-transform: uppercase; letter-spacing: 0.12em; font-size: 0.68em; background: rgba(196,203,211,0.22); border: 1px solid var(--border); border-radius: 999px; padding: 6px 10px; }
+
+/* Chapter divider */
+section.chapter { display: grid; place-items: center; text-align: center; padding: calc(var(--py) * 1.2) var(--px); }
+section.chapter::before { display: none; }
+section.chapter .num { font-size: 4.6em; font-weight: 800; letter-spacing: 0.02em; color: var(--fg); opacity: 0.08; position: absolute; top: 12%; left: var(--px); pointer-events: none; }
+section.chapter h1 { position: static; font-size: 2.4em; margin: 0 0 0.2em; }
+section.chapter .subtitle { opacity: 0.85; }
+section.chapter .band { width: 140px; height: 8px; border-radius: 10px; margin: 18px auto 0; }
